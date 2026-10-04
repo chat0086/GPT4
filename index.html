@@ -7,12 +7,11 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#000;color:#fff;font-family:Arial;height:100vh;display:flex;flex-direction:column}
-#top{height:50px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;border-bottom:1px solid #222}
+#top{height:50px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;border-bottom:1px solid #222;letter-spacing:1px}
 #chat{flex:1;overflow-y:auto;padding:12px;padding-bottom:85px}
 .m{padding:11px 14px;border-radius:16px;margin:9px 0;font-size:14.5px;line-height:1.6;max-width:92%;white-space:pre-wrap;word-wrap:break-word}
-.u{background:#0066ff;margin-left:auto}
-.a{background:#1e1e1e;margin-right:auto;border:1px solid #2a2a2a}
-.m img{max-width:100%;border-radius:12px;margin-top:8px}
+.u{background:#0066ff;margin-left:auto;border-bottom-right-radius:4px}
+.a{background:#1a1a1a;margin-right:auto;border-bottom-left-radius:4px;border:1px solid #2a2a2a}
 #bar{position:fixed;bottom:0;left:0;right:0;background:#000;padding:8px;display:flex;gap:8px;border-top:1px solid #222}
 #bar input{flex:1;background:#1e1e1e;border:1px solid #333;color:#fff;padding:13px 16px;border-radius:25px;outline:none}
 #bar button{background:#0066ff;border:none;color:#fff;padding:0 20px;border-radius:25px;font-weight:bold}
@@ -20,27 +19,32 @@ body{background:#000;color:#fff;font-family:Arial;height:100vh;display:flex;flex
 </head>
 <body>
 <div id="top">GPT FOUR</div>
-<div id="chat"><div class="m a">Hello Lala! I am GPT Four - 100% Free & Fast. No money needed. Ask anything!</div></div>
+<div id="chat">
+<div class="m a">I am GPT Four 🚀
+
+Your Smart AI Assistant.
+
+✨ Ask anything
+🎨 Generate images - just say "generate image of cat"
+💻 Write code, essays, poetry
+🌍 Supports Urdu, English & all languages
+
+How can I help you today?</div>
+</div>
 <div id="bar"><input id="q" placeholder="Ask anything..."><button onclick="ask()">Send</button></div>
 <script>
-let chat=document.getElementById('chat'), inp=document.getElementById('q');
-function add(t,c,h=false){let d=document.createElement('div');d.className='m '+c;if(h)d.innerHTML=t;else d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d;}
+let chat=document.getElementById('chat');
+let inp=document.getElementById('q');
+function add(t,c){let d=document.createElement('div');d.className='m '+c;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d;}
 async function ask(){
  let text=inp.value.trim();if(!text)return;
  add(text,'u');inp.value='';
- let aDiv=add('','a');
+ let aDiv=add('Thinking...','a');
  try{
-  let res=await fetch('https://text.pollinations.ai/'+encodeURIComponent(text)+'?model=openai&system=You are GPT Four by Ziddi Malik. Helpful, fast, friendly. Answer in user language.');
-  let reader=res.body.getReader(), decoder=new TextDecoder(), full='';
-  while(true){
-   let {done,value}=await reader.read();
-   if(done)break;
-   full+=decoder.decode(value);
-   aDiv.textContent=full;
-   chat.scrollTop=chat.scrollHeight;
-  }
-  if(!full) aDiv.textContent='Lala thora network slow hai, dubara bhejo.';
- }catch(e){aDiv.textContent='Error lala, internet check karo.';}
+  let r=await fetch('https://text.pollinations.ai/'+encodeURIComponent(text));
+  let ans=await r.text();
+  aDiv.textContent=ans;
+ }catch(e){aDiv.textContent='Network slow lala, try again.';}
 }
 inp.addEventListener('keydown',e=>{if(e.key==='Enter')ask();});
 </script>
